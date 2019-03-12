@@ -5,72 +5,75 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/sdk-application-tutorial/x/nameservice"
+	"github.com/kartikeya95/datastore/x/datastore"
+
+	//"github.com/kartikeya95/nameservice/x/nameservice"
+
 	"github.com/spf13/cobra"
 )
 
-// GetCmdResolveName queries information about a name
-func GetCmdResolveName(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// GetCmdQueryRecord queries information about a record
+func GetCmdQueryRecord(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "resolve [name]",
-		Short: "resolve name",
+		Use:   "fetch [record_id]",
+		Short: "fetch record_id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			name := args[0]
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/resolve/%s", queryRoute, name), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/record/data/%s", queryRoute, record_id), nil)
 			if err != nil {
-				fmt.Printf("could not resolve name - %s \n", string(name))
+				fmt.Printf("could not fetch data for _id - %s \n", string(record))
 				return nil
 			}
 
-			var out nameservice.QueryResResolve
+			var out datastore.Record
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
 	}
 }
 
-// GetCmdWhois queries information about a domain
-func GetCmdWhois(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// // GetCmdWhois queries information about a domain
+// func GetCmdWhois(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// 	return &cobra.Command{
+// 		Use:   "whois [name]",
+// 		Short: "Query whois info of name",
+// 		Args:  cobra.ExactArgs(1),
+// 		RunE: func(cmd *cobra.Command, args []string) error {
+// 			cliCtx := context.NewCLIContext().WithCodec(cdc)
+// 			name := args[0]
+
+// 			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/whois/%s", queryRoute, name), nil)
+// 			if err != nil {
+// 				fmt.Printf("could not resolve whois - %s \n", string(name))
+// 				return nil
+// 			}
+
+// 			var out nameservice.Whois
+// 			cdc.MustUnmarshalJSON(res, &out)
+// 			return cliCtx.PrintOutput(out)
+// 		},
+// 	}
+// }
+
+// GetCmdRecords queries a list of all names
+func GetCmdRecords(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "whois [name]",
-		Short: "Query whois info of name",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-			name := args[0]
-
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/whois/%s", queryRoute, name), nil)
-			if err != nil {
-				fmt.Printf("could not resolve whois - %s \n", string(name))
-				return nil
-			}
-
-			var out nameservice.Whois
-			cdc.MustUnmarshalJSON(res, &out)
-			return cliCtx.PrintOutput(out)
-		},
-	}
-}
-
-// GetCmdNames queries a list of all names
-func GetCmdNames(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
-		Use:   "names",
-		Short: "names",
+		Use:   "records",
+		Short: "records",
 		// Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/names", queryRoute), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/records", queryRoute), nil)
 			if err != nil {
-				fmt.Printf("could not get query names\n")
+				fmt.Printf("could not fetch records\n")
 				return nil
 			}
 
-			var out nameservice.QueryResNames
+			var out datastore.QueryResRecords
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},

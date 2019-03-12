@@ -2,7 +2,6 @@ package client
 
 import (
 	"github.com/cosmos/cosmos-sdk/client"
-	nameservicecmd "github.com/cosmos/sdk-application-tutorial/x/nameservice/client/cli"
 	"github.com/spf13/cobra"
 	amino "github.com/tendermint/go-amino"
 )
@@ -20,31 +19,32 @@ func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 // GetQueryCmd returns the cli query commands for this module
 func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	// Group nameservice queries under a subcommand
-	namesvcQueryCmd := &cobra.Command{
-		Use:   "nameservice",
-		Short: "Querying commands for the nameservice module",
+	datastoreQueryCmd := &cobra.Command{
+		Use:   "datastore",
+		Short: "Querying commands for the datastore module",
 	}
 
-	namesvcQueryCmd.AddCommand(client.GetCommands(
-		nameservicecmd.GetCmdResolveName(mc.storeKey, mc.cdc),
-		nameservicecmd.GetCmdWhois(mc.storeKey, mc.cdc),
-		nameservicecmd.GetCmdNames(mc.storeKey, mc.cdc),
+	datastoreQueryCmd.AddCommand(client.GetCommands(
+		datastoreQueryCmd.GetCmdQueryRecord(mc.storeKey, mc.cdc),
+		//datastoreQueryCmd.GetCmdWhois(mc.storeKey, mc.cdc),
+		datastoreQueryCmd.GetCmdRecords(mc.storeKey, mc.cdc),
 	)...)
 
-	return namesvcQueryCmd
+	return datastoreQueryCmd
 }
 
 // GetTxCmd returns the transaction commands for this module
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
-	namesvcTxCmd := &cobra.Command{
-		Use:   "nameservice",
-		Short: "Nameservice transactions subcommands",
+	datatsoreTxCmd := &cobra.Command{
+		Use:   "datatstore",
+		Short: "datastore transactions subcommands",
 	}
 
-	namesvcTxCmd.AddCommand(client.PostCommands(
-		nameservicecmd.GetCmdBuyName(mc.cdc),
-		nameservicecmd.GetCmdSetName(mc.cdc),
+	datatsoreTxCmd.AddCommand(client.PostCommands(
+		datatsoreTxCmd.GetCmdCreateRecord(mc.cdc),
+		datatsoreTxCmd.GetCmdModifyRecordData(mc.cdc),
+		datatsoreTxCmd.GetCmdModifyRecordOwner(mc.cdc),
 	)...)
 
-	return namesvcTxCmd
+	return datatsoreTxCmd
 }

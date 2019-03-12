@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 
+	nameservice "github.com/kartikeya95/datastore/x/datastore"
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -10,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/staking"
-	"github.com/cosmos/sdk-application-tutorial/x/nameservice"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	appName = "nameservice"
+	appName = "datastore"
 )
 
 type nameServiceApp struct {
