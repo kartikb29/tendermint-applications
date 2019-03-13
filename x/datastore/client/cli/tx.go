@@ -6,9 +6,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
+	datastore "github.com/kartikeya95/datastore/x/datastore"
 )
 
 // GetCmdCreateRecord is the CLI command for sending a CreateRecord transaction
@@ -32,7 +32,7 @@ func GetCmdCreateRecord(cdc *codec.Codec) *cobra.Command {
 			// }
 
 			msg := datastore.NewMsgCreateRecord(args[0], args[1], cliCtx.GetFromAddress())
-			err = msg.ValidateBasic()
+			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
@@ -65,7 +65,7 @@ func GetCmdModifyRecordData(cdc *codec.Codec) *cobra.Command {
 			// }
 
 			msg := datastore.NewMsgModifyRecordData(args[0], args[1], cliCtx.GetFromAddress())
-			err = msg.ValidateBasic()
+			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
@@ -98,7 +98,7 @@ func GetCmdModifyRecordOwner(cdc *codec.Codec) *cobra.Command {
 			// }
 
 			msg := datastore.NewMsgModifyRecordOwner(args[0], args[1], cliCtx.GetFromAddress())
-			err = msg.ValidateBasic()
+			err := msg.ValidateBasic()
 			if err != nil {
 				return err
 			}

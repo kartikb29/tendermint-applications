@@ -1,4 +1,4 @@
-package nameservice
+package datastore
 
 import (
 	"time"
@@ -13,19 +13,19 @@ import (
 type Record struct {
 	//_id          string         `json:"_id"`
 	Owner        sdk.AccAddress `json:"owner"`
-	creationTime int64          `json:"timeStamp"`
-	data         string         `json:"data"`
+	CreationTime int64          `json:"timeStamp"`
+	Data         string         `json:"data"`
 }
 
 // NewRecord returns a record with a randomly generated _id and its creationTime
 func NewRecord() Record {
 	//val, _ := randomHex(10)
-	currentTime := time.Now()
-	emptyString := ""
+	//var currentTime int64
+	currentTime := (time.Now()).Unix()
+	//emptyString := ""
 	return Record{
 		//_id:          val,
-		creationTime: currentTime,
-		data:         emptyString,
+		CreationTime: currentTime,
 	}
 }
 

@@ -288,12 +288,12 @@
   version = "v1.8.0"
 
 [[projects]]
-  digest = "1:3bb9c8451d199650bfd303e0068d86f135952fead374ad87c09a9b8a2cc4bd7c"
+  digest = "1:e150b5fafbd7607e2d638e4e5cf43aa4100124e5593385147b0a74e2733d8b0d"
   name = "github.com/mattn/go-isatty"
   packages = ["."]
   pruneopts = "UT"
-  revision = "369ecd8cea9851e459abb67eb171853e3986591e"
-  version = "v0.0.6"
+  revision = "c2a7a6ca930a4cd0bc33a3f298eb71960732a3a7"
+  version = "v0.0.7"
 
 [[projects]]
   digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
@@ -369,7 +369,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:bfc66a1fd78dc8f14d419fd52a5a42db1d572e887ebcc80b98c1a515a8f2d837"
+  digest = "1:01cd0cd47758f04c5604daa3be4637e2afa1e0c15af7e08289e95360369e4f48"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
@@ -379,7 +379,7 @@
     "xfs",
   ]
   pruneopts = "UT"
-  revision = "bbced9601137e764853b2fad7ec3e2dc4c504e02"
+  revision = "d0f344d83b0c80a1bc03b547a2374a9ec6711144"
 
 [[projects]]
   digest = "1:ea0700160aca4ef099f4e06686a665a87691f4248dddd40796925eda2e46bd64"
@@ -512,7 +512,7 @@
   version = "v0.12.1"
 
 [[projects]]
-  digest = "1:4a372b718ee1433fa421e1c9e450a8b14bc24f2b5d7b5f9329d4d49e360f5f9e"
+  digest = "1:791d8e6add900a4f6bb2e8dbb6da423576fc69cffa61368cb3df0552ff34aa06"
   name = "github.com/tendermint/tendermint"
   packages = [
     "abci/client",
@@ -578,8 +578,8 @@
     "version",
   ]
   pruneopts = "UT"
-  revision = "e0f8936455029a40287a69d5b0e7baa4d5864da1"
-  version = "v0.30.1"
+  revision = "976819537d199aa43c6ad55ec4e8958323322bb0"
+  version = "v0.30.2"
 
 [[projects]]
   digest = "1:5a736f4722932d9a45d28852e85b83f68292d9af2ef0be29d4e5fe6fd89d5d96"
@@ -649,14 +649,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7b74de50162e52401186a9fae9fa9f12516e749acb562e0b366a3538d35e3dd4"
+  digest = "1:53df1464a35ecef619d5d29fc24427e34798c47c31f8a35ff709cb71b4009972"
   name = "golang.org/x/sys"
   packages = [
     "cpu",
     "unix",
   ]
   pruneopts = "UT"
-  revision = "3e9a981b8ddba4cb37815d4ebf2171df73c5255b"
+  revision = "fead79001313d15903fb4605b4a1b781532cd93e"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -683,11 +683,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:077c1c599507b3b3e9156d17d36e1e61928ee9b53a5b420f10f28ebd4a0b275c"
+  digest = "1:c3076e7defee87de1236f1814beb588f40a75544c60121e6eb38b3b3721783e2"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "c21a8b77f9f040598af1c8c5c0870568f1959df3"
+  revision = "5fe7a883aa19554f42890211544aa549836af7b7"
 
 [[projects]]
   digest = "1:cbc746de4662c66fd24a037501bd65aa0f8ad0bfca0c92576e0abb88864e3741"
@@ -762,9 +762,7 @@
     "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder",
     "github.com/cosmos/cosmos-sdk/x/bank",
     "github.com/cosmos/cosmos-sdk/x/bank/client/cli",
-    "github.com/cosmos/cosmos-sdk/x/bank/client/rest",
     "github.com/cosmos/cosmos-sdk/x/params",
-    "github.com/cosmos/cosmos-sdk/x/staking",
     "github.com/gorilla/mux",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",

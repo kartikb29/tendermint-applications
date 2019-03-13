@@ -19,5 +19,5 @@ update_vendor_deps:
 	@dep ensure -v -update
 
 install:
-	go install ./cmd/nsd
-	go install ./cmd/nscli
+	go install ./cmd/enigmad
+	go install ./cmd/enigmacli

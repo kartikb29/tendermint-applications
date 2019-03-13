@@ -3,14 +3,13 @@ package app
 import (
 	"encoding/json"
 
-	nameservice "github.com/kartikeya95/datastore/x/datastore"
+	datastore "github.com/kartikeya95/datastore/x/datastore"
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
-	"github.com/cosmos/cosmos-sdk/x/staking"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,13 +23,13 @@ const (
 	appName = "datastore"
 )
 
-type nameServiceApp struct {
+type dataStoreApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
 	keyMain          *sdk.KVStoreKey
 	keyAccount       *sdk.KVStoreKey
-	keyNS            *sdk.KVStoreKey
+	keyDS            *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
@@ -39,11 +38,11 @@ type nameServiceApp struct {
 	bankKeeper          bank.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
-	nsKeeper            nameservice.Keeper
+	dsKeeper            datastore.Keeper
 }
 
-// NewNameServiceApp is a constructor function for nameServiceApp
-func NewNameServiceApp(logger log.Logger, db dbm.DB) *nameServiceApp {
+// NewDataStoreApp is a constructor function for dataStoreApp
+func NewDataStoreApp(logger log.Logger, db dbm.DB) *dataStoreApp {
 
 	// First define the top level codec that will be shared by the different modules
 	cdc := MakeCodec()
@@ -52,13 +51,13 @@ func NewNameServiceApp(logger log.Logger, db dbm.DB) *nameServiceApp {
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
 
 	// Here you initialize your application with the store keys it requires
-	var app = &nameServiceApp{
+	var app = &dataStoreApp{
 		BaseApp: bApp,
 		cdc:     cdc,
 
 		keyMain:          sdk.NewKVStoreKey("main"),
 		keyAccount:       sdk.NewKVStoreKey("acc"),
-		keyNS:            sdk.NewKVStoreKey("ns"),
+		keyDS:            sdk.NewKVStoreKey("ds"),
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
 		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
@@ -87,9 +86,9 @@ func NewNameServiceApp(logger log.Logger, db dbm.DB) *nameServiceApp {
 
 	// The NameserviceKeeper is the Keeper from the module for this tutorial
 	// It handles interactions with the namestore
-	app.nsKeeper = nameservice.NewKeeper(
-		app.bankKeeper,
-		app.keyNS,
+	app.dsKeeper = datastore.NewKeeper(
+		//app.bankKeeper,
+		app.keyDS,
 		app.cdc,
 	)
 
@@ -99,12 +98,12 @@ func NewNameServiceApp(logger log.Logger, db dbm.DB) *nameServiceApp {
 	// The app.Router is the main transaction router where each module registers its routes
 	// Register the bank and nameservice routes here
 	app.Router().
-		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
-		AddRoute("nameservice", nameservice.NewHandler(app.nsKeeper))
+		//AddRoute("bank", bank.NewHandler(app.bankKeeper)).
+		AddRoute("datastore", datastore.NewHandler(app.dsKeeper))
 
 	// The app.QueryRouter is the main query router where each module registers its routes
 	app.QueryRouter().
-		AddRoute("nameservice", nameservice.NewQuerier(app.nsKeeper))
+		AddRoute("datastore", datastore.NewQuerier(app.dsKeeper))
 
 	// The initChainer handles translating the genesis.json file into initial state for the network
 	app.SetInitChainer(app.initChainer)
@@ -112,7 +111,7 @@ func NewNameServiceApp(logger log.Logger, db dbm.DB) *nameServiceApp {
 	app.MountStores(
 		app.keyMain,
 		app.keyAccount,
-		app.keyNS,
+		app.keyDS,
 		app.keyFeeCollection,
 		app.keyParams,
 		app.tkeyParams,
@@ -128,12 +127,12 @@ func NewNameServiceApp(logger log.Logger, db dbm.DB) *nameServiceApp {
 
 // GenesisState represents chain state at the start of the chain. Any initial state (account balances) are stored here.
 type GenesisState struct {
-	AuthData auth.GenesisState   `json:"auth"`
-	BankData bank.GenesisState   `json:"bank"`
+	AuthData auth.GenesisState `json:"auth"`
+	//BankData bank.GenesisState   `json:"bank"`
 	Accounts []*auth.BaseAccount `json:"accounts"`
 }
 
-func (app *nameServiceApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *dataStoreApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 
 	genesisState := new(GenesisState)
@@ -148,20 +147,20 @@ func (app *nameServiceApp) initChainer(ctx sdk.Context, req abci.RequestInitChai
 	}
 
 	auth.InitGenesis(ctx, app.accountKeeper, app.feeCollectionKeeper, genesisState.AuthData)
-	bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
+	//bank.InitGenesis(ctx, app.bankKeeper, genesisState.BankData)
 
 	return abci.ResponseInitChain{}
 }
 
 // ExportAppStateAndValidators does the things
-func (app *nameServiceApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
+func (app *dataStoreApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 	ctx := app.NewContext(true, abci.Header{})
 	accounts := []*auth.BaseAccount{}
 
 	appendAccountsFn := func(acc auth.Account) bool {
 		account := &auth.BaseAccount{
 			Address: acc.GetAddress(),
-			Coins:   acc.GetCoins(),
+			//Coins:   acc.GetCoins(),
 		}
 
 		accounts = append(accounts, account)
@@ -173,7 +172,7 @@ func (app *nameServiceApp) ExportAppStateAndValidators() (appState json.RawMessa
 	genState := GenesisState{
 		Accounts: accounts,
 		AuthData: auth.DefaultGenesisState(),
-		BankData: bank.DefaultGenesisState(),
+		//BankData: bank.DefaultGenesisState(),
 	}
 
 	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
@@ -188,9 +187,9 @@ func (app *nameServiceApp) ExportAppStateAndValidators() (appState json.RawMessa
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
 	auth.RegisterCodec(cdc)
-	bank.RegisterCodec(cdc)
-	nameservice.RegisterCodec(cdc)
-	staking.RegisterCodec(cdc)
+	//bank.RegisterCodec(cdc)
+	datastore.RegisterCodec(cdc)
+	//staking.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 	return cdc

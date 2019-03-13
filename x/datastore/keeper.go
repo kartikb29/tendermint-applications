@@ -1,4 +1,4 @@
-package nameservice
+package datastore
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -32,7 +32,7 @@ func (k Keeper) GetRecord(ctx sdk.Context, _id string) Record {
 	}
 	bz := store.Get([]byte(_id))
 	var record Record
-	k.cdc.MustUnmarshalBinaryBare(bz, &Record)
+	k.cdc.MustUnmarshalBinaryBare(bz, &record)
 	return record
 }
 
@@ -47,13 +47,13 @@ func (k Keeper) SetRecord(ctx sdk.Context, _id string, record Record) {
 
 // GetData - returns the data string that the _id resolves to
 func (k Keeper) GetData(ctx sdk.Context, _id string) string {
-	return k.GetRecord(ctx, _id).data
+	return k.GetRecord(ctx, _id).Data
 }
 
 // SetData - sets the data string that a _id resolves to
 func (k Keeper) SetData(ctx sdk.Context, _id string, data string) {
 	record := k.GetRecord(ctx, _id)
-	record.data = data
+	record.Data = data
 	k.SetRecord(ctx, _id, record)
 }
 

@@ -1,4 +1,4 @@
-package nameservice
+package datastore
 
 import (
 	"encoding/json"
@@ -37,7 +37,7 @@ func NewMsgCreateRecord(_id string, data string, owner sdk.AccAddress) MsgCreate
 
 //NewMsgModifyRecordData is s constructor function for MsgModifyRecordData
 func NewMsgModifyRecordData(_id string, data string, owner sdk.AccAddress) MsgModifyRecordData {
-	return MsgModifyRecord{
+	return MsgModifyRecordData{
 		_id:   _id,
 		data:  data,
 		Owner: owner,
@@ -46,7 +46,7 @@ func NewMsgModifyRecordData(_id string, data string, owner sdk.AccAddress) MsgMo
 
 //NewMsgModifyRecordOwner is s constructor function for MsgModifyRecordOwner
 func NewMsgModifyRecordOwner(_id string, data string, owner sdk.AccAddress) MsgModifyRecordOwner {
-	return MsgModifyRecord{
+	return MsgModifyRecordOwner{
 		_id:   _id,
 		Owner: owner,
 	}
@@ -84,21 +84,23 @@ func (msg MsgCreateRecord) ValidateBasic() sdk.Error {
 //ValidateBasic runs stateless checks on the message
 func (msg MsgModifyRecordData) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress(msg.Oner.String())
+		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
 	if len(msg._id) == 0 || len(msg.data) == 0 {
 		return sdk.ErrUnknownRequest("The _id or data cannot be empty")
 	}
+	return nil
 }
 
 //ValidateBasic runs stateless checks on the message
 func (msg MsgModifyRecordOwner) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
-		return sdk.ErrInvalidAddress(msg.Oner.String())
+		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
 	if len(msg._id) == 0 {
 		return sdk.ErrUnknownRequest("The _id or data cannot be empty")
 	}
+	return nil
 }
 
 // GetSignBytes encodes the message for signing

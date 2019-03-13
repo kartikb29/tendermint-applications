@@ -63,7 +63,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 
 // nolint: unparam
 func queryRecord(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
-	name := path[0]
+	_id := path[0]
 
 	record := keeper.GetRecord(ctx, _id)
 
@@ -78,7 +78,7 @@ func queryRecord(ctx sdk.Context, path []string, req abci.RequestQuery, keeper K
 // implement fmt.Stringer
 func (r Record) String() string {
 	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
-		data: %s`, r.Owner, r.data))
+		data: %s`, r.Owner, r.Data))
 }
 
 func queryRecords(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {

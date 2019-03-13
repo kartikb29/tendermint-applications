@@ -9,22 +9,22 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+	datastore "github.com/kartikeya95/datastore/x/datastore"
 
 	"github.com/gorilla/mux"
 )
 
-const (
-	restName = "record"
-)
+// const (
+// 	restName = "record"
+// )
 
 // RegisterRoutes - Central function to define routes that get registered by the main application
-func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
-	r.HandleFunc(fmt.Sprintf("/%s/record", record_id), createRecordHandler(cdc, cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/record", record_id), modifyRecordDataHandler(cdc, cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/record", record_id), modifyRecordOwnerHandler(cdc, cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/record/{%s}", record_id, restName), resolveNameHandler(cdc, cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/record/{%s}/data", record_id, restName), whoIsHandler(cdc, cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/record/{%s}/owner", storeName, restName), whoIsHandler(cdc, cliCtx, storeName)).Methods("GET")
+func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, _id string) {
+	r.HandleFunc(fmt.Sprintf("/datastore/record/%s", _id), createRecordHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/datastore/record/data/%s", _id), modifyRecordDataHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/datastore/record/owner/%s", _id), modifyRecordOwnerHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/datastore/record/%s", _id), getRecordHandler(cdc, cliCtx, _id)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/datastore/records"), recordsHandler(cdc, cliCtx)).Methods("GET")
 }
 
 type createRecordReq struct {
@@ -48,7 +48,7 @@ func createRecordHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.Handl
 			return
 		}
 
-		addr, err := sdk.AccAddressFromBech32(req.Buyer)
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
@@ -86,7 +86,7 @@ func modifyRecordDataHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.H
 			return
 		}
 
-		addr, err := sdk.AccAddressFromBech32(req.Buyer)
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
@@ -216,7 +216,7 @@ func getRecordHandler(cdc *codec.Codec, cliCtx context.CLIContext, _id string) h
 // 	}
 // }
 
-func namesHandler(cdc *codec.Codec, cliCtx context.CLIContext, _id string) http.HandlerFunc {
+func recordsHandler(cdc *codec.Codec, cliCtx context.CLIContext, _id string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/records", _id), nil)
 		if err != nil {

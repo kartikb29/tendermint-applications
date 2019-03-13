@@ -1,4 +1,4 @@
-package nameservice
+package datastore
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ func handleMsgModifyRecordData(ctx sdk.Context, keeper Keeper, msg MsgModifyReco
 }
 
 // Handle a message to modify record owner
-func handleMsgModifyRecordData(ctx sdk.Context, keeper Keeper, msg MsgModifyRecordData) sdk.Result {
+func handleMsgModifyRecordOwner(ctx sdk.Context, keeper Keeper, msg MsgModifyRecordOwner) sdk.Result {
 	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg._id)) { // Checks if the the msg sender is the same as the current owner
 		return sdk.ErrUnauthorized("Incorrect Owner").Result() // If not, throw an error
 	}

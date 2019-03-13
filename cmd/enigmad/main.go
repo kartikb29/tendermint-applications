@@ -13,7 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/crypto"
@@ -23,7 +22,7 @@ import (
 
 	gaiaInit "github.com/cosmos/cosmos-sdk/cmd/gaia/init"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	app "github.com/cosmos/sdk-application-tutorial"
+	app "github.com/kartikeya95/datastore"
 	abci "github.com/tendermint/tendermint/abci/types"
 	cfg "github.com/tendermint/tendermint/config"
 	dbm "github.com/tendermint/tendermint/libs/db"
@@ -31,7 +30,7 @@ import (
 )
 
 // DefaultNodeHome sets the folder where the applcation data and configuration will be stored
-var DefaultNodeHome = os.ExpandEnv("$HOME/.nsd")
+var DefaultNodeHome = os.ExpandEnv("$HOME/.enigmad")
 
 const (
 	flagOverwrite = "overwrite"
@@ -44,8 +43,8 @@ func main() {
 	ctx := server.NewDefaultContext()
 
 	rootCmd := &cobra.Command{
-		Use:               "nsd",
-		Short:             "nameservice App Daemon (server)",
+		Use:               "enigmad",
+		Short:             "datastore App Daemon (server)",
 		PersistentPreRunE: server.PersistentPreRunEFn(ctx),
 	}
 
@@ -55,7 +54,7 @@ func main() {
 	server.AddCommands(ctx, cdc, rootCmd, newApp, appExporter())
 
 	// prepare and add flags
-	executor := cli.PrepareBaseCmd(rootCmd, "NS", DefaultNodeHome)
+	executor := cli.PrepareBaseCmd(rootCmd, "DS", DefaultNodeHome)
 	err := executor.Execute()
 	if err != nil {
 		// handle with #870
@@ -64,13 +63,13 @@ func main() {
 }
 
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) abci.Application {
-	return app.NewNameServiceApp(logger, db)
+	return app.NewDataStoreApp(logger, db)
 }
 
 func appExporter() server.AppExporter {
 	return func(logger log.Logger, db dbm.DB, _ io.Writer, _ int64, _ bool, _ []string) (
 		json.RawMessage, []tmtypes.GenesisValidator, error) {
-		dapp := app.NewNameServiceApp(logger, db)
+		dapp := app.NewDataStoreApp(logger, db)
 		return dapp.ExportAppStateAndValidators()
 	}
 }
@@ -104,7 +103,7 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 
 			genesis := app.GenesisState{
 				AuthData: auth.DefaultGenesisState(),
-				BankData: bank.DefaultGenesisState(),
+				//BankData: bank.DefaultGenesisState(),
 			}
 
 			appState, err = codec.MarshalJSONIndent(cdc, genesis)
@@ -138,9 +137,9 @@ func InitCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 // AddGenesisAccountCmd allows users to add accounts to the genesis file
 func AddGenesisAccountCmd(ctx *server.Context, cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "add-genesis-account [address] [coins[,coins]]",
+		Use:   "add-genesis-account [address]",
 		Short: "Adds an account to the genesis file",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		Long: strings.TrimSpace(`
 Adds accounts to the genesis file so that you can start a chain with coins in the CLI:
 
@@ -151,11 +150,11 @@ $ nsd add-genesis-account cosmos1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAK
 			if err != nil {
 				return err
 			}
-			coins, err := sdk.ParseCoins(args[1])
-			if err != nil {
-				return err
-			}
-			coins.Sort()
+			// coins, err := sdk.ParseCoins(args[1])
+			// if err != nil {
+			// 	return err
+			// }
+			// coins.Sort()
 
 			var genDoc tmtypes.GenesisDoc
 			config := ctx.Config
@@ -183,7 +182,7 @@ $ nsd add-genesis-account cosmos1tse7r2fadvlrrgau3pa0ss7cqh55wrv6y9alwh 1000STAK
 			}
 
 			acc := auth.NewBaseAccountWithAddress(addr)
-			acc.Coins = coins
+			//acc.Coins = coins
 			appState.Accounts = append(appState.Accounts, &acc)
 			appStateJSON, err := cdc.MarshalJSON(appState)
 			if err != nil {
