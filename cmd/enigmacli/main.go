@@ -19,9 +19,9 @@ import (
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
-	app "github.com/kartikeya95/datastore"
-	dsclient "github.com/kartikeya95/datastore/x/datastore/client/cli"
-	dsrest "github.com/kartikeya95/datastore/x/datastore/client/rest"
+	app "github.com/kartikeya95/distributed-datastore"
+	dsclient "github.com/kartikeya95/distributed-datastore/x/datastore/client"
+	dsrest "github.com/kartikeya95/distributed-datastore/x/datastore/client/rest"
 )
 
 const (

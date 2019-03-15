@@ -1,4 +1,4 @@
-package nameservice
+package datastore
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"

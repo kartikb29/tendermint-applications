@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/cosmos/cosmos-sdk/client"
+	datastorecmd "github.com/kartikeya95/distributed-datastore/x/datastore/client/cli"
 	"github.com/spf13/cobra"
 	amino "github.com/tendermint/go-amino"
 )
@@ -12,6 +13,7 @@ type ModuleClient struct {
 	cdc      *amino.Codec
 }
 
+//NewModuleClient - constructor function for the module client
 func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 	return ModuleClient{storeKey, cdc}
 }
@@ -25,9 +27,9 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	}
 
 	datastoreQueryCmd.AddCommand(client.GetCommands(
-		datastoreQueryCmd.GetCmdQueryRecord(mc.storeKey, mc.cdc),
+		datastorecmd.GetCmdQueryRecord(mc.storeKey, mc.cdc),
 		//datastoreQueryCmd.GetCmdWhois(mc.storeKey, mc.cdc),
-		datastoreQueryCmd.GetCmdRecords(mc.storeKey, mc.cdc),
+		datastorecmd.GetCmdRecords(mc.storeKey, mc.cdc),
 	)...)
 
 	return datastoreQueryCmd
@@ -41,9 +43,9 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	}
 
 	datatsoreTxCmd.AddCommand(client.PostCommands(
-		datatsoreTxCmd.GetCmdCreateRecord(mc.cdc),
-		datatsoreTxCmd.GetCmdModifyRecordData(mc.cdc),
-		datatsoreTxCmd.GetCmdModifyRecordOwner(mc.cdc),
+		datastorecmd.GetCmdCreateRecord(mc.cdc),
+		datastorecmd.GetCmdModifyRecordData(mc.cdc),
+		datastorecmd.GetCmdModifyRecordOwner(mc.cdc),
 	)...)
 
 	return datatsoreTxCmd

@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
-	datastore "github.com/kartikeya95/datastore/x/datastore"
+	datastore "github.com/kartikeya95/distributed-datastore/x/datastore"
 )
 
 // GetCmdCreateRecord is the CLI command for sending a CreateRecord transaction

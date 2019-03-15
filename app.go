@@ -3,7 +3,7 @@ package app
 import (
 	"encoding/json"
 
-	datastore "github.com/kartikeya95/datastore/x/datastore"
+	datastore "github.com/kartikeya95/distributed-datastore/x/datastore"
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -23,7 +23,8 @@ const (
 	appName = "datastore"
 )
 
-type dataStoreApp struct {
+//DataStoreApp - type declaration for a new data store application
+type DataStoreApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
@@ -42,7 +43,7 @@ type dataStoreApp struct {
 }
 
 // NewDataStoreApp is a constructor function for dataStoreApp
-func NewDataStoreApp(logger log.Logger, db dbm.DB) *dataStoreApp {
+func NewDataStoreApp(logger log.Logger, db dbm.DB) *DataStoreApp {
 
 	// First define the top level codec that will be shared by the different modules
 	cdc := MakeCodec()
@@ -51,7 +52,7 @@ func NewDataStoreApp(logger log.Logger, db dbm.DB) *dataStoreApp {
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
 
 	// Here you initialize your application with the store keys it requires
-	var app = &dataStoreApp{
+	var app = &DataStoreApp{
 		BaseApp: bApp,
 		cdc:     cdc,
 
@@ -132,7 +133,7 @@ type GenesisState struct {
 	Accounts []*auth.BaseAccount `json:"accounts"`
 }
 
-func (app *dataStoreApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+func (app *DataStoreApp) initChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	stateJSON := req.AppStateBytes
 
 	genesisState := new(GenesisState)
@@ -153,7 +154,7 @@ func (app *dataStoreApp) initChainer(ctx sdk.Context, req abci.RequestInitChain)
 }
 
 // ExportAppStateAndValidators does the things
-func (app *dataStoreApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
+func (app *DataStoreApp) ExportAppStateAndValidators() (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 	ctx := app.NewContext(true, abci.Header{})
 	accounts := []*auth.BaseAccount{}
 

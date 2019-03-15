@@ -9,7 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	datastore "github.com/kartikeya95/datastore/x/datastore"
+	datastore "github.com/kartikeya95/distributed-datastore/x/datastore"
 
 	"github.com/gorilla/mux"
 )
@@ -29,8 +29,8 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 
 type createRecordReq struct {
 	BaseReq rest.BaseReq `json:"base_req"`
-	_id     string       `json:"_id"`
-	data    string       `json:"data"`
+	ID      string       `json:"_id"`
+	Data    string       `json:"data"`
 	Owner   string       `json:"Owner"`
 }
 
@@ -61,7 +61,7 @@ func createRecordHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.Handl
 		// }
 
 		// create the message
-		msg := datastore.NewMsgCreateRecord(req._id, data, addr)
+		msg := datastore.NewMsgCreateRecord(req.ID, req.Data, addr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -99,7 +99,7 @@ func modifyRecordDataHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.H
 		// }
 
 		// create the message
-		msg := datastore.NewMsgModifyRecordData(req._id, data, addr)
+		msg := datastore.NewMsgModifyRecordData(req.ID, req.Data, addr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -124,7 +124,7 @@ func modifyRecordOwnerHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.
 			return
 		}
 
-		addr, err := sdk.AccAddressFromBech32(req.Buyer)
+		addr, err := sdk.AccAddressFromBech32(req.Owner)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
@@ -137,7 +137,7 @@ func modifyRecordOwnerHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.
 		// }
 
 		// create the message
-		msg := datastore.NewMsgModifyRecordOwner(req._id, data, addr)
+		msg := datastore.NewMsgModifyRecordOwner(req.ID, req.Data, addr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -188,10 +188,10 @@ func modifyRecordOwnerHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.
 
 func getRecordHandler(cdc *codec.Codec, cliCtx context.CLIContext, _id string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		paramType := vars[restName]
+		//vars := mux.Vars(r)
+		//paramType := vars[restName]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/record/data/%s", _id, paramType), nil)
+		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/record/data/%s", _id), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
@@ -216,9 +216,9 @@ func getRecordHandler(cdc *codec.Codec, cliCtx context.CLIContext, _id string) h
 // 	}
 // }
 
-func recordsHandler(cdc *codec.Codec, cliCtx context.CLIContext, _id string) http.HandlerFunc {
+func recordsHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/records", _id), nil)
+		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/records"), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return

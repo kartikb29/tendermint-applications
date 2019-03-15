@@ -1,4 +1,4 @@
-package nameservice
+package datastore
 
 import (
 	"fmt"

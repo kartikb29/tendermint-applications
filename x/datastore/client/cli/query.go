@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
-	datastore "github.com/kartikeya95/datastore/x/datastore"
+	datastore "github.com/kartikeya95/distributed-datastore/x/datastore"
 
 	//"github.com/kartikeya95/nameservice/x/nameservice"
 
