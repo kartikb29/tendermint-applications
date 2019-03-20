@@ -25,31 +25,31 @@ func NewHandler(keeper Keeper) sdk.Handler {
 
 //Handles a message to create Record
 func handleMsgCreateRecord(ctx sdk.Context, keeper Keeper, msg MsgCreateRecord) sdk.Result {
-	if len(keeper.GetOwner(ctx, msg._id)) != 0 {
+	if len(keeper.GetOwner(ctx, msg.ID)) != 0 {
 		errMsg := "A record with that ID already exists, please use a unique ID"
 		return sdk.ErrUnknownRequest(errMsg).Result()
 	}
-	keeper.SetOwner(ctx, msg._id, msg.Owner)
-	keeper.SetData(ctx, msg._id, msg.data)
+	keeper.SetOwner(ctx, msg.ID, msg.Owner)
+	keeper.SetData(ctx, msg.ID, msg.Data)
 	return sdk.Result{}
 }
 
 // Handle a message to modify record data
 func handleMsgModifyRecordData(ctx sdk.Context, keeper Keeper, msg MsgModifyRecordData) sdk.Result {
-	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg._id)) { // Checks if the the msg sender is the same as the current owner
+	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) { // Checks if the the msg sender is the same as the current owner
 		return sdk.ErrUnauthorized("Incorrect Owner").Result() // If not, throw an error
 	}
-	keeper.SetData(ctx, msg._id, msg.data) // If so, set the name to the value specified in the msg.
-	return sdk.Result{}                    // return
+	keeper.SetData(ctx, msg.ID, msg.Data) // If so, set the name to the value specified in the msg.
+	return sdk.Result{}                   // return
 }
 
 // Handle a message to modify record owner
 func handleMsgModifyRecordOwner(ctx sdk.Context, keeper Keeper, msg MsgModifyRecordOwner) sdk.Result {
-	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg._id)) { // Checks if the the msg sender is the same as the current owner
+	if !msg.Owner.Equals(keeper.GetOwner(ctx, msg.ID)) { // Checks if the the msg sender is the same as the current owner
 		return sdk.ErrUnauthorized("Incorrect Owner").Result() // If not, throw an error
 	}
-	keeper.SetOwner(ctx, msg._id, msg.Owner) // If so, set the name to the value specified in the msg.
-	return sdk.Result{}                      // return
+	keeper.SetOwner(ctx, msg.ID, msg.Owner) // If so, set the name to the value specified in the msg.
+	return sdk.Result{}                     // return
 }
 
 // // Handle a message to buy name

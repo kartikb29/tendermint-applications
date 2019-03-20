@@ -38,7 +38,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 // GetTxCmd returns the transaction commands for this module
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	datatsoreTxCmd := &cobra.Command{
-		Use:   "datatstore",
+		Use:   "datastore",
 		Short: "datastore transactions subcommands",
 	}
 

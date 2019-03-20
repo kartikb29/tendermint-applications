@@ -8,29 +8,29 @@ import (
 
 // MsgCreateRecord defines a CreateRecord message
 type MsgCreateRecord struct {
-	_id   string
-	data  string
+	ID    string
+	Data  string
 	Owner sdk.AccAddress
 }
 
 //MsgModifyRecordData defines a ModifyRecordOwner message
 type MsgModifyRecordData struct {
-	_id   string
-	data  string
+	ID    string
+	Data  string
 	Owner sdk.AccAddress
 }
 
 //MsgModifyRecordOwner defines a ModifyRecordOwner message
 type MsgModifyRecordOwner struct {
-	_id   string
+	ID    string
 	Owner sdk.AccAddress
 }
 
-// NewMsgCreateRecord is a constructor function for MsgSetRecord
+// NewMsgCreateRecord is a constructor function for MsgCreateRecord
 func NewMsgCreateRecord(_id string, data string, owner sdk.AccAddress) MsgCreateRecord {
 	return MsgCreateRecord{
-		_id:   _id,
-		data:  data,
+		ID:    _id,
+		Data:  data,
 		Owner: owner,
 	}
 }
@@ -38,8 +38,8 @@ func NewMsgCreateRecord(_id string, data string, owner sdk.AccAddress) MsgCreate
 //NewMsgModifyRecordData is s constructor function for MsgModifyRecordData
 func NewMsgModifyRecordData(_id string, data string, owner sdk.AccAddress) MsgModifyRecordData {
 	return MsgModifyRecordData{
-		_id:   _id,
-		data:  data,
+		ID:    _id,
+		Data:  data,
 		Owner: owner,
 	}
 }
@@ -47,7 +47,7 @@ func NewMsgModifyRecordData(_id string, data string, owner sdk.AccAddress) MsgMo
 //NewMsgModifyRecordOwner is s constructor function for MsgModifyRecordOwner
 func NewMsgModifyRecordOwner(_id string, data string, owner sdk.AccAddress) MsgModifyRecordOwner {
 	return MsgModifyRecordOwner{
-		_id:   _id,
+		ID:    _id,
 		Owner: owner,
 	}
 }
@@ -75,7 +75,7 @@ func (msg MsgCreateRecord) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
-	if len(msg._id) == 0 || len(msg.data) == 0 {
+	if len(msg.ID) == 0 || len(msg.Data) == 0 {
 		return sdk.ErrUnknownRequest("The _id or data cannot be empty")
 	}
 	return nil
@@ -86,7 +86,7 @@ func (msg MsgModifyRecordData) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
-	if len(msg._id) == 0 || len(msg.data) == 0 {
+	if len(msg.ID) == 0 || len(msg.Data) == 0 {
 		return sdk.ErrUnknownRequest("The _id or data cannot be empty")
 	}
 	return nil
@@ -97,7 +97,7 @@ func (msg MsgModifyRecordOwner) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
-	if len(msg._id) == 0 {
+	if len(msg.ID) == 0 {
 		return sdk.ErrUnknownRequest("The _id or data cannot be empty")
 	}
 	return nil
