@@ -26,7 +26,7 @@ func GetCmdQueryRecord(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return nil
 			}
 
-			var out datastore.QueryResData
+			var out datastore.Record
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},

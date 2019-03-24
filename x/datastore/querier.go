@@ -63,9 +63,9 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 func queryRecord(ctx sdk.Context, path []string, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
 	_id := path[0]
 
-	data := keeper.GetData(ctx, _id)
+	record := keeper.GetRecord(ctx, _id)
 
-	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, QueryResData{data})
+	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, record)
 	if err2 != nil {
 		panic("could not marshal result to JSON")
 	}
@@ -73,15 +73,17 @@ func queryRecord(ctx sdk.Context, path []string, req abci.RequestQuery, keeper K
 	return bz, nil
 }
 
-//QueryResData is struct for a fetch record query
-type QueryResData struct {
-	Data string `json:"Data"`
-}
+// //QueryResData is struct for a fetch record query
+// type QueryResData struct {
+// 	Data string `json:"Data"`
+// }
 
 // implement fmt.Stringer
-func (r QueryResData) String() string {
+func (r Record) String() string {
 	return strings.TrimSpace(fmt.Sprintf(`
-	Data: %s`, r.Data))
+	Owner: %s
+	CreationTime: %v
+	Data: %s`, r.Owner, r.CreationTime, r.Data))
 }
 
 func queryRecords(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
