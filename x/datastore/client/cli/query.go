@@ -7,8 +7,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	datastore "github.com/kartikeya95/distributed-datastore/x/datastore"
 
-	//"github.com/kartikeya95/nameservice/x/nameservice"
-
 	"github.com/spf13/cobra"
 )
 
@@ -24,11 +22,11 @@ func GetCmdQueryRecord(queryRoute string, cdc *codec.Codec) *cobra.Command {
 
 			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/record/%s", queryRoute, _id), nil)
 			if err != nil {
-				fmt.Printf("could not fetch data for _id - %s \n", string(_id))
+				fmt.Printf("could not fetch data for ID - %s, ERR: %v \n", string(_id), err)
 				return nil
 			}
 
-			var out datastore.Record
+			var out datastore.QueryResData
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
