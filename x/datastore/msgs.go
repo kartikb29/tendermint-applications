@@ -75,8 +75,8 @@ func (msg MsgCreateRecord) ValidateBasic() sdk.Error {
 	if msg.Owner.Empty() {
 		return sdk.ErrInvalidAddress(msg.Owner.String())
 	}
-	if len(msg.ID) == 0 || len(msg.Data) == 0 {
-		return sdk.ErrUnknownRequest("The _id or data cannot be empty")
+	if msg.ID == "" || msg.Data == "" {
+		return sdk.ErrUnknownRequest("The _id" + msg.ID + " or data" + msg.Data + " cannot be empty")
 	}
 	return nil
 }

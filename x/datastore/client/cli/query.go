@@ -22,7 +22,7 @@ func GetCmdQueryRecord(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			_id := args[0]
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/record/data/%s", queryRoute, _id), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/record/%s", queryRoute, _id), nil)
 			if err != nil {
 				fmt.Printf("could not fetch data for _id - %s \n", string(_id))
 				return nil

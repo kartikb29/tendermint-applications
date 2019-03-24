@@ -12,7 +12,7 @@ import (
 
 // query endpoints supported by the datastore Querier
 const (
-	QueryRecord = "record/data"
+	QueryRecord = "record"
 	//QueryRecordOwner = "record/owner"
 	QueryRecords = "records"
 )
@@ -78,7 +78,8 @@ func queryRecord(ctx sdk.Context, path []string, req abci.RequestQuery, keeper K
 // implement fmt.Stringer
 func (r Record) String() string {
 	return strings.TrimSpace(fmt.Sprintf(`Owner: %s
-		data: %s`, r.Owner, r.Data))
+	CreationTime: %v
+	Data: %s`, r.Owner, r.CreationTime, r.Data))
 }
 
 func queryRecords(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) (res []byte, err sdk.Error) {
